@@ -1,0 +1,9 @@
+flask
+flask-sqlalchemy
+black
+flake8
+flask-admin
+isort
+mypy
+pylint
+pytest

@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- `ruby` version 3.3.1
+- `python` version 3.8
 - `sqlite3`
 
 ## Intro
@@ -73,3 +73,27 @@ Please also note that:
 - All asset prices are defined in the same currency.
 
 **Good luck!**
+
+## Setup and run the app
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/CamilleClipet/wesave_test
+   cd wesave_test
+   ```
+
+2. Start the application using Docker Compose:
+    ```sh
+    docker-compose up --build
+    ```
+
+3. Open a shell in the Docker container
+    ```sh
+    docker-compose exec web sh
+    ```
+4. Load the json data
+    ```sh
+    python -m app.scripts.load_json
+    ```
+
+
