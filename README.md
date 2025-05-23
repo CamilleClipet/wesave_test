@@ -99,3 +99,22 @@ Please also note that:
 ## Level 1
 
 Visit http://localhost:5001/portfolios/
+
+## Notes
+
+Thank you for giving me the chance to do this test.
+
+I tried to not spend too much time on it and it stops at level 2. Because it was on such short notice I picked Flask / SQLalchemy over Ruby, I hope you don't mind. It took me a little while to respawn a containerized Flask project as I don't create projects from scratch in my day-to-day. I helped myself with ChatGPT for that.
+I took the liberty of changing the json data because the amounts didn't add up (amount in portfolio != sum of investments amounts).
+
+Now, for what's missing that I'm aware of:
+- typing
+- end-to-end tests
+- automatic linting / reformatting (I tried to do it as I go)
+- some refactoring to put come code / methods in common in the business logic such as making sure the investment exists, checking the amount against the investment's amount...
+- I realised mid-test I was confusing a contract with a portfolio (and assumed there was only 1 portfolio), hopefully there shouldn't be residual issues / mistakes from that.
+- I don't know if you expected more views? Btw I went with port 5001 because my own port 5000 was unavailable due to processes I couldn't kill.
+- I probably could have managed the project with uv to save me some hassle but I thought of it mid-test
+- Of course the whole logic changes if there are several customers
+
+Thank you in advance for reading.
