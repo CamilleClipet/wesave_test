@@ -55,3 +55,4 @@ instance/
 
 # Environment variables file
 .env
+.flake8]
