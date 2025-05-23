@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Portfolios</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h2 { margin-top: 40px; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Customer Portfolios</h1>
+
+    {% for portfolio in portfolios %}
+        <h2>{{ portfolio.label }} ({{ portfolio.type }}) — {{ portfolio.amount }} €</h2>
+
+        {% if portfolio.portfolio_investments %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Label</th>
+                        <th>Type</th>
+                        <th>ISIN</th>
+                        <th>Price</th>
+                        <th>SRRI</th>
+                        <th>Amount</th>
+                        <th>Share</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pi in portfolio.portfolio_investments | sort(attribute='share', reverse=True) %}
+                        <tr>
+                            <td>{{ pi.investment.label }}</td>
+                            <td>{{ pi.investment.type }}</td>
+                            <td>{{ pi.investment.isin }}</td>
+                            <td>{{ pi.investment.price }}</td>
+                            <td>{{ pi.investment.srri }}</td>
+                            <td>{{ pi.amount }}</td>
+                            <td>{{ pi.share }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Pas d'investissements dans ce portfolio.</p>
+        {% endif %}
+    {% endfor %}
+</body>
+</html>
