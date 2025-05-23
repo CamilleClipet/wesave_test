@@ -3,6 +3,7 @@ import json
 import pytest
 
 from app import create_app, db
+from app.config import TestConfig
 from app.models.investment import Investment
 from app.models.portfolio import Portfolio
 from app.models.portfolio_investment import PortfolioInvestment
@@ -10,7 +11,7 @@ from app.models.portfolio_investment import PortfolioInvestment
 
 @pytest.fixture
 def client():
-    app = create_app()
+    app = create_app(TestConfig)
     app.config["TESTING"] = True
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
