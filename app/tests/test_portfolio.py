@@ -214,3 +214,84 @@ def test_withdraw_investment_invalid_amount(client):
         json={"amount": 1000000, "investment_id": 1},
     )
     assert response.status_code == 400
+
+
+@pytest.mark.unit
+def test_move_investment_inside_portfolio(client):
+    from app.business_logic.portfolio import move_money_between_investments
+    from app.models.investment import Investment
+    from app.models.portfolio import Portfolio
+    from app.models.portfolio_investment import PortfolioInvestment
+
+    with client.application.app_context():
+        portfolio = Portfolio.query.first()
+        assert portfolio is not None
+        initial_amount = portfolio.amount
+
+        # we want to move money between investments labelled "Apple Inc." and "Microsoft Corp."
+        target_investment_from = Investment.query.filter_by(label="Apple Inc.").first()
+        target_investment_to = Investment.query.filter_by(
+            label="Microsoft Corp."
+        ).first()
+        apple_portfolio_investment = PortfolioInvestment.query.filter_by(
+            investment_id=target_investment_from.id, portfolio_id=portfolio.id
+        ).first()
+        google_portfolio_investment = PortfolioInvestment.query.filter_by(
+            investment_id=target_investment_to.id, portfolio_id=portfolio.id
+        ).first()
+
+        assert apple_portfolio_investment is not None
+        assert google_portfolio_investment is not None
+
+        apple_initial_amount = apple_portfolio_investment.amount
+        google_initial_amount = google_portfolio_investment.amount
+
+        move_money_between_investments(
+            target_investment_from.id,
+            target_investment_to.id,
+            portfolio.id,
+            1000,
+        )
+
+        portfolio = Portfolio.query.first()
+        assert portfolio.amount == initial_amount
+
+        apple_portfolio_investment = PortfolioInvestment.query.filter_by(
+            investment_id=target_investment_from.id, portfolio_id=portfolio.id
+        ).first()
+        google_portfolio_investment = PortfolioInvestment.query.filter_by(
+            investment_id=target_investment_to.id, portfolio_id=portfolio.id
+        ).first()
+
+        assert apple_portfolio_investment.amount == apple_initial_amount - 1000
+        assert google_portfolio_investment.amount == google_initial_amount + 1000
+
+
+@pytest.mark.unit
+def test_move_investment_not_enough_amount(client):
+    from app.business_logic.portfolio import move_money_between_investments
+    from app.models.investment import Investment
+    from app.models.portfolio import Portfolio
+    from app.models.portfolio_investment import PortfolioInvestment
+
+    with client.application.app_context():
+        portfolio = Portfolio.query.first()
+        assert portfolio is not None
+
+        # we want to move money between investments labelled "Apple Inc." and "Microsoft Corp."
+        target_investment_from = Investment.query.filter_by(label="Apple Inc.").first()
+        target_investment_to = Investment.query.filter_by(
+            label="Microsoft Corp."
+        ).first()
+        apple_portfolio_investment = PortfolioInvestment.query.filter_by(
+            investment_id=target_investment_from.id, portfolio_id=portfolio.id
+        ).first()
+
+        # try to move more than the amount available
+        with pytest.raises(ValueError, match="Not enough amount to withdraw"):
+            move_money_between_investments(
+                target_investment_from.id,
+                target_investment_to.id,
+                portfolio.id,
+                apple_portfolio_investment.amount + 1,
+            )

@@ -61,3 +61,42 @@ def withdraw_amount_from_portfolio(investment_id, portfolio_id, amount):
         )
 
     db.session.commit()
+
+
+def move_money_between_investments(
+    investment_id_from, investment_id_to, portfolio_id, amount
+):
+    from app import db
+    from app.models.portfolio import Portfolio
+    from app.models.portfolio_investment import PortfolioInvestment
+
+    portfolio = Portfolio.query.get(portfolio_id)
+
+    # check if investment already in portfolio
+    portfolio_investment_from = PortfolioInvestment.query.filter_by(
+        investment_id=investment_id_from, portfolio_id=portfolio_id
+    ).first()
+
+    if not portfolio_investment_from:
+        raise ValueError("Investment not found in portfolio")
+
+    if portfolio_investment_from.amount < amount:
+        raise ValueError("Not enough amount to withdraw")
+
+    # check if investment already in portfolio
+    portfolio_investment_to = PortfolioInvestment.query.filter_by(
+        investment_id=investment_id_to, portfolio_id=portfolio_id
+    ).first()
+
+    if not portfolio_investment_to:
+        raise ValueError("Investment not found in portfolio")
+
+    portfolio_investment_from.amount -= amount
+    portfolio_investment_to.amount += amount
+
+    for investment in portfolio.portfolio_investments:
+        investment.share = (
+            investment.amount / portfolio.amount if portfolio.amount != 0 else 0
+        )
+
+    db.session.commit()
