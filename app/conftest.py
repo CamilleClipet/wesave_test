@@ -33,9 +33,7 @@ def client():
             db.session.flush()
 
             for line in contract.get("lines", []):
-                investment = Investment.query.filter_by(
-                    isin=line["isin"]
-                ).first()
+                investment = Investment.query.filter_by(isin=line["isin"]).first()
                 if not investment:
                     investment = Investment(
                         type=line["type"],

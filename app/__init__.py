@@ -19,6 +19,7 @@ def create_app(config_class=Config):
         from app.models.investment import Investment
         from app.models.portfolio import Portfolio
         from app.models.portfolio_investment import PortfolioInvestment
+
         db.create_all()
 
     return app

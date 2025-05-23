@@ -16,9 +16,5 @@ class PortfolioInvestment(db.Model):
     amount = db.Column(db.Float, nullable=False)
     share = db.Column(db.Float, nullable=False)
 
-    portfolio = db.relationship(
-        "Portfolio", back_populates="portfolio_investments"
-    )
-    investment = db.relationship(
-        "Investment", back_populates="portfolio_investments"
-    )
+    portfolio = db.relationship("Portfolio", back_populates="portfolio_investments")
+    investment = db.relationship("Investment", back_populates="portfolio_investments")
