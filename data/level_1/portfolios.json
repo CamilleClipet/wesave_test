@@ -3,7 +3,7 @@
         {
             "label": "Portefeuille d'actions",
             "type": "CTO",
-            "amount": 15000.0,
+            "amount": 84850.0,
             "lines": [
                 {
                     "type": "stock",
@@ -98,7 +98,7 @@
         {
             "label": "Assurance Vie - Plan d'Épargne",
             "type": "Assurance Vie",
-            "amount": 50000.0,
+            "amount": 100000.0,
             "lines": [
                 {
                     "type": "euro_fund",
