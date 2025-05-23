@@ -1,9 +1,12 @@
 import json
+
 import pytest
+
 from app import create_app, db
-from app.models.portfolio import Portfolio
 from app.models.investment import Investment
+from app.models.portfolio import Portfolio
 from app.models.portfolio_investment import PortfolioInvestment
+
 
 @pytest.fixture
 def client():
@@ -23,20 +26,22 @@ def client():
             portfolio = Portfolio(
                 label=contract["label"],
                 type=contract["type"],
-                amount=contract["amount"]
+                amount=contract["amount"],
             )
             db.session.add(portfolio)
             db.session.flush()
 
             for line in contract.get("lines", []):
-                investment = Investment.query.filter_by(isin=line["isin"]).first()
+                investment = Investment.query.filter_by(
+                    isin=line["isin"]
+                ).first()
                 if not investment:
                     investment = Investment(
                         type=line["type"],
                         isin=line["isin"],
                         label=line["label"],
                         price=line["price"],
-                        srri=line["srri"]
+                        srri=line["srri"],
                     )
                     db.session.add(investment)
                     db.session.flush()
@@ -45,7 +50,7 @@ def client():
                     portfolio_id=portfolio.id,
                     investment_id=investment.id,
                     amount=line["amount"],
-                    share=line["share"]
+                    share=line["share"],
                 )
                 db.session.add(join_data)
 

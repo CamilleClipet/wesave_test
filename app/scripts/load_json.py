@@ -1,8 +1,8 @@
 import json
 
 from app import create_app, db
-from app.models.portfolio import Portfolio
 from app.models.investment import Investment
+from app.models.portfolio import Portfolio
 from app.models.portfolio_investment import PortfolioInvestment
 
 app = create_app()
